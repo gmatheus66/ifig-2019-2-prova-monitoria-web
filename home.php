@@ -1,22 +1,25 @@
 <?php
 
-require 'config.php';
+require_once 'config.php';
+
 
 if (!is_logged()) {
     header('location: index.php');
     exit();
 }
 
-$stmt = $pdo->execute('SELECT * FROM clients ORDER BY name');
+$stmt = $pdo->prepare('SELECT * FROM clients');
+$stmt -> execute();
 $clients = $stmt->fetchAll();
+ 
+$smt = $pdo -> prepare("
+SELECT  services.*,
+clients.name as client_name
+FROM    services
+LEFT JOIN clients ON clients.id = services.client_id");
+$smt ->execute();
+$services = $smt -> fetchAll();
 
-$stmt = $pdo->query('
-    SELECT  services.*,
-            clients.name as client_name
-    FROM    services
-            LEFT JOIN clients ON clients.id = services.client_id
-')
-$services = $stmt->fetchAll();
 
 ?>
 <!DOCTYPE html>
@@ -33,19 +36,20 @@ $services = $stmt->fetchAll();
                 <fieldset>
                     <legend>Novo cliente</legend>
                     <input type="text" name="name" placeholder="Name">
-                    <input type="text" name="name" placeholder="CEP">
-                    <input type="text" name="name" placeholder="Número">
-                    <input type="text" name="name" placeholder="Complemento">
+                    <input type="text" name="cep" placeholder="CEP">
+                    <input type="text" name="numero" placeholder="Número">
+                    <input type="text" name="complemento" placeholder="Complemento">
                     <input type="submit" value="Adicionar">
                 </fieldset>
             </form>
             <table>
                 <tr>
                     <th>Cliente</th>
+                    <th>Ação</th>
                 </tr>
                 <?php foreach ($clients as $client): ?>
                     <tr>
-                        <td><?= $CLIENT['name'] ?></td>
+                        <td><?= $client['name'] ?></td>
                         <td>
                             <a class="edit" href="edit_client.php?id=<?= $client['id'] ?>">Editar</a>
                             <a class="delete" href="del_client.php?id=<?= $client['id'] ?>">Remover</a>
@@ -76,9 +80,10 @@ $services = $stmt->fetchAll();
                     <th>Cliente</th>
                     <th>Equip.</th>
                     <th>Status</th>
+                    <th>Ação</th>
                 </tr>
                 <?php foreach ($services as $service): ?>
-                    <li>
+                    <tr>
                         <td><?= $service['client_name'] ?></td>
                         <td><?= $service['equip'] ?></td>
                         <td>
@@ -97,7 +102,7 @@ $services = $stmt->fetchAll();
                             <?php endif ?>
                             <a class="delete" href="del_service.php?id=<?= $service['id'] ?>">Remover</a>
                         </td>
-                    </li>
+                    </tr>
                 <?php endforeach ?>
             </table>
         </div>

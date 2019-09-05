@@ -1,6 +1,6 @@
 <?php
 
-require 'config.php';
+require_once 'config.php';
 
 if (!is_logged()) {
     header('location: index.php');
@@ -21,14 +21,16 @@ $stmt = $pdo->prepare('
             LEFT JOIN clients ON clients.id = services.client_id
     WHERE services.id = ?
 ');
-$stmt->execute($id)
+$stmt -> bindParam(1, $id);
+$stmt->execute();
 
 $res = $stmt->fetchAll();
+
 if (sizeof($res) == 0) {
     header('location: home.php');
     exit();
 }
-$service = $res[0]
+$service = $res[0];
 
 ?>
 <!DOCTYPE html>

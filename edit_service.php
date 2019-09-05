@@ -1,6 +1,6 @@
 <?php
 
-require 'config.php'
+require_once 'config.php';
 
 if (!is_logged()) {
     header('location: index.php');
@@ -12,15 +12,16 @@ if (!isset($_GET['id'])) {
     exit();
 }
 
-$id = $_GET['id']
+$id = $_GET['id'];
 
-$stmt = $pdo->prepare('
+
+$stmt = $pdo -> prepare("
     SELECT  services.*,
             clients.id as client_id
     FROM    services
             LEFT JOIN clients ON clients.id = services.client_id
     WHERE services.id = ?
-');
+");
 $stmt->execute(array($id));
 
 $res = $stmt->fetchAll();

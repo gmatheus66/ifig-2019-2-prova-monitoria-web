@@ -1,6 +1,6 @@
 <?php
 
-require 'config.php';
+require_once 'config.php';
 
 if (!is_logged()) {
     header('location: index.php');
@@ -9,19 +9,21 @@ if (!is_logged()) {
 
 if (!isset($_POST['solution']) || !isset($_GET['id'])) {
     header('location: home.php');
-    exit()
+    exit();
 }
 
-$id       = $_POST['id'];
-$solution = $_GET['solution'];
+$id       = $_GET['id'];
+$solution = $_POST['solution'];
 
-$stmt = $pdo->execute('
+$stmt = $pdo-> prepare('
     UPDATE  services
     SET     solution = ?,
             is_open = 0
     WHERE   id = ?
 ');
-$stmt->query(array($solution, $id));
+$stmt -> bindParam(1, $solution);
+$stmt -> bindParam(2, $id);
+$stmt -> execute();
 
 
 header('location: home.php');

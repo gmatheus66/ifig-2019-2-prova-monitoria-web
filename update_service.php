@@ -1,13 +1,13 @@
 <?php
 
-require 'config.php';
+require_once 'config.php';
 
-if !is_logged() {
+if (!is_logged()) {
     header('location: index.php');
     exit();
 }
 
-if (!isset($_POST['client-id']) || !isset($_POST['equip']) || !isset($_POST['problem']) ||| !isset($_GET['id'])) {
+if (!isset($_POST['client-id']) || !isset($_POST['equip']) || !isset($_POST['problem']) || !isset($_GET['id']) ) {
     header('location: home.php');
     exit();
 }
@@ -24,9 +24,14 @@ $stmt = $pdo->prepare('
             problem = ?
     WHERE   id = ?
 ');
-$stmt->execute($client_id, $equip, $problem, $id);
+$stmt -> bindParam(1, $client_id);
+$stmt -> bindParam(2, $equip);
+$stmt -> bindParam(3, $problem);
+$stmt -> bindParam(4, $id);
+$stmt -> execute();
 
-head('location: home.php');
+
+header('location: home.php');
 
 
 ?>

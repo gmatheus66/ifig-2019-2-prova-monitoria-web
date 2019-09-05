@@ -1,3 +1,6 @@
+drop database if exists `web-2019-2`;
+create database `web-2019-2`;
+
 use `web-2019-2`;
 
 CREATE TABLE users (
@@ -37,3 +40,7 @@ VALUES  ('ranieri', 'ranieri', '64834d1949af5eefa6d24a6156d39cab5c57839c'), -- s
 INSERT INTO clients (name, cep, num, compl)
 VALUES  ('ranieri', '53415000', '000', ''),
         ('tony', '55000000', '123', 'localizacao secreta');
+        
+
+-- create user userRani identified by 'ranieri';
+-- grant all privileges on `web-2019-2`.* to userRani;

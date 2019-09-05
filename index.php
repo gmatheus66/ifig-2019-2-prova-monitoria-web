@@ -1,8 +1,8 @@
 <?php
 
-require 'config.php'
+require 'config.php';
 
-if (is_logged()) {
+if(is_logged()) {
     header('location: home.php');
 }
 

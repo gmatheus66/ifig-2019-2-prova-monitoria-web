@@ -1,4 +1,4 @@
-<?php require 'config.php' ?>
+<?php require_once 'config.php'; ?>
 <div class="nav">
     <ul>
         <li><?= $_SESSION['user'] ?></li>
